@@ -66,7 +66,7 @@ def show_vid():
         cv2.circle(img, (x, y), 10, (0, 255, 0), cv2.FILLED)
         if (x != 0 and y != 0):
             newpoints.append([x, y])
-        cv2.imshow('Mask', mask)
+        # cv2.imshow('Mask', mask)
         cv2.waitKey(1)
         return newpoints
 
