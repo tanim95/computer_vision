@@ -51,53 +51,40 @@ def show_vid():
     video.set(3, 640)
     video.set(4, 480)
 
-    # single color pen mask
+    # Single color pen mask
     my_colors = [35, 93, 59, 94, 179, 179]
     colr = (0, 255, 0)
     moving_points = []  # [x,y]
 
-    def find_color(img, color):
-        newpoints = []
-        hsv_img = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
-        lower = np.array(color[0:3])
-        upper = np.array(color[3:6])
-        mask = cv2.inRange(hsv_img, lower, upper)
-        x, y = find_contours(img, mask)
-        cv2.circle(img, (x, y), 10, (0, 255, 0), cv2.FILLED)
-        if (x != 0 and y != 0):
-            newpoints.append([x, y])
-        # cv2.imshow('Mask', mask)
-        cv2.waitKey(1)
-        return newpoints
-
-    def find_contours(img, mask):
-        contours, _ = cv2.findContours(
-            mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-        x, y, w, h = 0, 0, 0, 0
-        for contour in contours:
-            x, y, w, h = cv2.boundingRect(contour)
-            # cv2.drawContours(img, [contour], -1, (0, 255, 0), 2)
-            cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 0), 2)
-        return x+w // 2, y
-
-    def draw(img, points, color):
-        for point in points:
-            cv2.circle(img, (point[0], point[1]), 10, color, cv2.FILLED)
-
     while True:
         ret, frame = video.read()
-        copied_img = frame.copy()
-        newpoints = find_color(copied_img, my_colors)
-        if newpoints is not None:
-            for p in newpoints:
-                moving_points.append(p)
-        if moving_points is not None:
-            draw(copied_img, moving_points, colr)
-
         if not ret:
             break
 
-        cv2.imshow('video', copied_img)
+        # Convert frame to HSV color space
+        hsv_img = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+
+        # Create a color mask
+        lower = np.array(my_colors[0:3])
+        upper = np.array(my_colors[3:6])
+        mask = cv2.inRange(hsv_img, lower, upper)
+
+        # Find contours in the mask
+        contours, _ = cv2.findContours(
+            mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
+        # Process only the largest contour
+        if len(contours) > 0:
+            contour = max(contours, key=cv2.contourArea)
+            x, y, w, h = cv2.boundingRect(contour)
+            cv2.rectangle(frame, (x, y), (x + w, y + h), colr, 2)
+            moving_points.append((x + w // 2, y))
+
+        # Draw circles at detected points
+        for point in moving_points:
+            cv2.circle(frame, point, 10, colr, cv2.FILLED)
+
+        cv2.imshow('video', frame)
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
 
