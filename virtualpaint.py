@@ -61,10 +61,9 @@ def show_vid():
         if not ret:
             break
 
-        # Convert frame to HSV color space
         hsv_img = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 
-        # Create a color mask
+        # color mask
         lower = np.array(my_colors[0:3])
         upper = np.array(my_colors[3:6])
         mask = cv2.inRange(hsv_img, lower, upper)
@@ -73,14 +72,14 @@ def show_vid():
         contours, _ = cv2.findContours(
             mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
-        # Process only the largest contour
+        # finding largest contour
         if len(contours) > 0:
             contour = max(contours, key=cv2.contourArea)
             x, y, w, h = cv2.boundingRect(contour)
             cv2.rectangle(frame, (x, y), (x + w, y + h), colr, 2)
             moving_points.append((x + w // 2, y))
 
-        # Draw circles at detected points
+        # Drawing circles at detected points
         for point in moving_points:
             cv2.circle(frame, point, 10, colr, cv2.FILLED)
 
