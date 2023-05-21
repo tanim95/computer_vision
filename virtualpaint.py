@@ -43,57 +43,8 @@ def show_video():
     video.release()
     cv2.destroyAllWindows()
 
-
 # show_video()
 
-# def show_vid():
-#     video = cv2.VideoCapture(0)
-#     video.set(3, 640)
-#     video.set(4, 480)
-
-#     # 3 diffrent color pen mask
-#     my_colors = [[35, 93, 59, 94, 179, 179], [
-#         50, 80, 70, 100, 120, 125], [45, 80, 65, 100, 150, 150]]
-
-#     def find_color(img, colors):
-#         hsv_img = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
-#         masks = []
-#         for color in colors:
-#             lower = np.array(color[0:3])
-#             upper = np.array(color[3:6])
-#             mask = cv2.inRange(hsv_img, lower, upper)
-#             masks.append(mask)
-
-#         combined_mask = cv2.bitwise_or(*masks)
-#         find_contours(img, combined_mask)
-#         cv2.imshow('Combined Mask', combined_mask)
-#         cv2.waitKey(1)
-
-#     def find_contours(img, mask):
-#         contours, _ = cv2.findContours(
-#             mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-
-#         for contour in contours:
-#             x, y, w, h = cv2.boundingRect(contour)
-#             cv2.drawContours(img, [contour], -1, (0, 255, 0), 2)
-#             cv2.rectangle(img, (x, y), (x + w, y + h), (0, 0, 255), 2)
-
-#     while True:
-#         ret, frame = video.read()
-#         copied_img = frame.copy()
-#         find_color(copied_img, my_colors)
-
-#         if not ret:
-#             break
-
-#         cv2.imshow('video', copied_img)
-#         if cv2.waitKey(1) & 0xFF == ord('q'):
-#             break
-#     video.release()
-#     cv2.destroyAllWindows()
-
-
-# show_vid()
 
 def show_vid():
     video = cv2.VideoCapture(0)
