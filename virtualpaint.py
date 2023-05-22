@@ -4,8 +4,8 @@ import numpy as np
 
 def show_video():
     video = cv2.VideoCapture(0)
-    video.set(3, 640)
-    video.set(4, 480)
+    video.set(3, 640)  # width
+    video.set(4, 480)  # height
 
     def empty(a):
         pass
@@ -16,8 +16,8 @@ def show_video():
     cv2.createTrackbar('SAT Min', 'HSV', 0, 255, empty)
     cv2.createTrackbar('VALUE Min', 'HSV', 0, 255, empty)
     cv2.createTrackbar('HUE Max', 'HSV', 179, 179, empty)
-    cv2.createTrackbar('SAT Max', 'HSV', 255, 179, empty)
-    cv2.createTrackbar('VALUE Max', 'HSV', 255, 179, empty)
+    cv2.createTrackbar('SAT Max', 'HSV', 255, 255, empty)
+    cv2.createTrackbar('VALUE Max', 'HSV', 255, 255, empty)
 
     while True:
         ret, frame = video.read()
@@ -42,6 +42,7 @@ def show_video():
             break
     video.release()
     cv2.destroyAllWindows()
+
 
 # show_video()
 
@@ -68,7 +69,6 @@ def show_vid():
         upper = np.array(my_colors[3:6])
         mask = cv2.inRange(hsv_img, lower, upper)
 
-        # Find contours in the mask
         contours, _ = cv2.findContours(
             mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
@@ -79,7 +79,6 @@ def show_vid():
             cv2.rectangle(frame, (x, y), (x + w, y + h), colr, 2)
             moving_points.append((x + w // 2, y))
 
-        # Drawing circles at detected points
         for point in moving_points:
             cv2.circle(frame, point, 10, colr, cv2.FILLED)
 
