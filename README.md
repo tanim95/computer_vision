@@ -8,7 +8,9 @@ The project aims to implement various computer vision techniques to solve a spec
 
 ## Features
 
-- PROJECT_1: VIRTUAL PAINT
+- PROJECT_1: VIRTUAL PAINT: in this project we use live camera feed to draw a virtual line.
+
+- PROJECT_2: in this project we will use hand tracking to controll volume
 
 ## Installation
 

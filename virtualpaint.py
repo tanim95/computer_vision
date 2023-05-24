@@ -49,6 +49,7 @@ def show_video():
 
 def show_vid():
     video = cv2.VideoCapture(0)
+    # video = cv2.VideoCapture(0, cv2.CAP_DSHOW)
     video.set(3, 640)
     video.set(4, 480)
 
