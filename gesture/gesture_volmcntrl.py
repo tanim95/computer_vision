@@ -15,8 +15,6 @@ while True:
         break
 
     hand_tracker.track_hands(frame=frame)
-    lndmrk_list = hand_tracker.point_position(frame=frame)
-    print(lndmrk_list)
 
     cv2.imshow('Hand Tracking', frame)
     if cv2.waitKey(1) & 0xFF == ord('q'):

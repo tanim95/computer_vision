@@ -36,6 +36,7 @@ class HandTracker:
                             self.mp_drawing.DrawingSpec(color=(0, 255, 0), thickness=2, circle_radius=2))
 
                 self.display_fps(frame)
+                self.point_position(frame)
 
                 cv2.imshow('Hand Tracking', frame)
                 if cv2.waitKey(1) & 0xFF == ord('q'):
@@ -47,14 +48,15 @@ class HandTracker:
     def point_position(self, frame, hand=0):
         landmarks = []
         if self.results.multi_hand_landmarks:
-            for i, hand_landmarks in enumerate(self.results.multi_hand_landmarks):
-                for j, landmark in enumerate(hand_landmarks.landmark):
+            for hland in self.results.multi_hand_landmarks:
+                for i, l in enumerate(hland.landmark):
                     h, w, _ = frame.shape
-                    cx, cy = int(landmark.x * w), int(landmark.y * h)
-                    landmarks.append([j, cx, cy])
-                    if i == hand and j == 0:
+                    cx, cy = int(l.x * w), int(l.y * h)
+                    landmarks.append([i, cx, cy])
+                    if i == hand:
                         cv2.circle(frame, (cx, cy), 10,
                                    (255, 0, 255), cv2.FILLED)
+        print(landmarks)
         return landmarks
 
     def display_fps(self, frame):
