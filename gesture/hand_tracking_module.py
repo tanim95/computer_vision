@@ -30,20 +30,10 @@ class HandTracker:
 
                 if results.multi_hand_landmarks:
                     for hland in results.multi_hand_landmarks:
-                        for i, l in enumerate(hland.landmark):
-                            h, w, c = frame.shape
-                            cx, cy = int(l.x * w), int(l.y * h)
-
                         self.mp_drawing.draw_landmarks(
                             frame, hland, self.mp_hands.HAND_CONNECTIONS, self.mp_drawing.DrawingSpec(
                                 color=(0, 0, 255), thickness=2, circle_radius=2),
                             self.mp_drawing.DrawingSpec(color=(0, 255, 0), thickness=2, circle_radius=2))
-
-                cur_time = time.time()
-                fps = 1 / (cur_time - self.prev_time)
-                self.prev_time = cur_time
-                cv2.putText(frame, f"FPS: {round(fps)}", (10, 30),
-                            cv2.FONT_HERSHEY_COMPLEX, 1, (0, 255, 0), 2)
 
                 cv2.imshow('Hand Tracking', frame)
                 if cv2.waitKey(1) & 0xFF == ord('q'):
@@ -52,6 +42,24 @@ class HandTracker:
         self.video.release()
         cv2.destroyAllWindows()
 
+    def point_position(self, frame, hand_landmarks):
+        for i, l in enumerate(hand_landmarks.landmark):
+            h, w, c = frame.shape
+            cx, cy = int(l.x * w), int(l.y * h)
+            if i == 0:
+                self.mp_drawing.draw_landmarks(
+                    frame, hand_landmarks, self.mp_hands.HAND_CONNECTIONS,
+                    self.mp_drawing.DrawingSpec(
+                        color=(0, 255, 0), thickness=2, circle_radius=2),
+                    self.mp_drawing.DrawingSpec(color=(0, 0, 255), thickness=2, circle_radius=2))
+
+
+    def display_fps(self, frame):
+        cur_time = time.time()
+        fps = 1 / (cur_time - self.prev_time)
+        self.prev_time = cur_time
+        cv2.putText(frame, f"FPS: {round(fps)}", (10, 30),
+                    cv2.FONT_HERSHEY_COMPLEX, 1, (0, 255, 0), 2)
 
 def main():
     hand_tracker = HandTracker()
