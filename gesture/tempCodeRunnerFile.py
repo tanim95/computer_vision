@@ -1,1 +1,1 @@
-cv2.imshow('Hand Tracking', frame)
+print(landmarks[2], landmarks[4])
