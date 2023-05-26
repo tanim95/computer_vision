@@ -1,1 +1,0 @@
-print(landmarks[2], landmarks[4])
