@@ -1,1 +1,1 @@
-print(lndmrk_list)
+cv2.imshow('Hand Tracking', frame)

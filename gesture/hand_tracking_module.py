@@ -11,6 +11,8 @@ class HandTracker:
         self.video.set(3, 640)
         self.video.set(4, 480)
         self.prev_time = time.time()
+        self.results = None
+        self.landmarks = None
 
     def track_hands(self, frame):
         with self.mp_hands.Hands(
@@ -19,45 +21,33 @@ class HandTracker:
                 min_detection_confidence=0.5,
                 min_tracking_confidence=0.5) as hands:
 
-            while True:
-                ret, frame = self.video.read()
-                if not ret:
-                    break
+            image_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+            self.results = hands.process(image_rgb)
 
-                image_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+            if self.results.multi_hand_landmarks:
+                for hland in self.results.multi_hand_landmarks:
+                    self.mp_drawing.draw_landmarks(
+                        frame, hland, self.mp_hands.HAND_CONNECTIONS, self.mp_drawing.DrawingSpec(
+                            color=(0, 0, 255), thickness=2, circle_radius=2),
+                        self.mp_drawing.DrawingSpec(color=(0, 255, 0), thickness=2, circle_radius=2))
 
-                self.results = hands.process(image_rgb)
+            self.display_fps(frame)
+            self.get_landmarks(frame)
 
-                if self.results.multi_hand_landmarks:
-                    for hland in self.results.multi_hand_landmarks:
-                        self.mp_drawing.draw_landmarks(
-                            frame, hland, self.mp_hands.HAND_CONNECTIONS, self.mp_drawing.DrawingSpec(
-                                color=(0, 0, 255), thickness=2, circle_radius=2),
-                            self.mp_drawing.DrawingSpec(color=(0, 255, 0), thickness=2, circle_radius=2))
+            cv2.imshow('Hand Tracking', frame)
+            if cv2.waitKey(1) & 0xFF == ord('q'):
+                return
 
-                self.display_fps(frame)
-                self.point_position(frame)
-
-                cv2.imshow('Hand Tracking', frame)
-                if cv2.waitKey(1) & 0xFF == ord('q'):
-                    break
-
-        self.video.release()
-        cv2.destroyAllWindows()
-
-    def point_position(self, frame, hand=0):
-        landmarks = []
+    def get_landmarks(self, frame, hand=0):
+        self.landmarks = []
         if self.results.multi_hand_landmarks:
-            for hland in self.results.multi_hand_landmarks:
-                for i, l in enumerate(hland.landmark):
-                    h, w, _ = frame.shape
-                    cx, cy = int(l.x * w), int(l.y * h)
-                    landmarks.append([i, cx, cy])
-                    if i == hand:
-                        cv2.circle(frame, (cx, cy), 10,
-                                   (255, 0, 255), cv2.FILLED)
-        print(landmarks)
-        return landmarks
+            myhand = self.results.multi_hand_landmarks[hand]
+            for i, l in enumerate(myhand.landmark):
+                h, w, _ = frame.shape
+                cx, cy = int(l.x * w), int(l.y * h)
+                self.landmarks.append([i, cx, cy])
+                # if i == hand:
+                #     cv2.circle(frame, (cx, cy), 10, (255, 0, 255), cv2.FILLED)
 
     def display_fps(self, frame):
         cur_time = time.time()
