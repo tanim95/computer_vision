@@ -10,37 +10,43 @@ The project aims to implement various computer vision techniques to solve a spec
 
 - PROJECT_1: VIRTUAL PAINT: in this project we use live camera feed to draw a virtual line.
 
-- PROJECT_2: in this project we will use hand tracking to controll volume
+- PROJECT_2: This is a Python project that uses hand tracking with the help of MediaPipe library to control the system volume based on hand gestures.
 
 ## Installation
 
 1. Clone the repository: https://github.com/tanim95/computer_vision.git
 
-2. Install the required libraries using pip:
+2. Install the required libraries using pip: For instance pip install mediapipe or python -m pip install mediapipe
+
+- Python 3.x
+- OpenCV
+- Mediapipe
+- Pycaw
+- Comtypes
 
 This will install all the necessary dependencies for these project.
 
 ## Usage
 
-1. Step 1: Describe the first step or command to run the project.
+project 1:
 
-2. Step 3: Provide any additional usage instructions or examples.
+Position yourself in front of the camera.
+Raise your hand and open your palm to start tracking.
+Move your hand up or down to control the system volume.
+The volume level will be indicated by a green rectangle on the right side of the screen.
+To exit the application, press the 'q' key.
 
 ## Documentation
 
-## Contributing
-
-Contributions are welcome! If you would like to contribute to this project, please follow these steps:
-
-1. Fork the repository.
-2. Create a new branch for your feature or bug fix.
-3. Make your changes and commit them with descriptive messages.
-4. Push your changes to your forked repository.
-5. Submit a pull request to the main repository.
-
 ## License
 
+This project is licensed under the MIT License.
+
 ## Acknowledgements
+
+This project uses the MediaPipe library for hand tracking. More information about MediaPipe can be found at https://google.github.io/mediapipe/.
+The audio control is implemented using the Pycaw library, a Windows library developed by AndreMiras. More information about Pycaw can be found at https://github.com/AndreMiras/pycaw.
+License
 
 ## Contact
 
