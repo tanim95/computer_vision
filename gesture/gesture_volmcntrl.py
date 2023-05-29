@@ -3,7 +3,6 @@ import mediapipe as mp
 from hand_tracking_module import HandTracker
 import math
 import numpy as np
-import pycaw  # it's a windows library developed by AndreMiras
 from comtypes import CLSCTX_ALL
 from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
 
