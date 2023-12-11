@@ -10,7 +10,7 @@ def show_video():
     def empty(a):
         pass
 
-    cv2.namedWindow('HSV')
+    cv2.namedWindow('HSV Track Bar')
     cv2.resizeWindow('HSV', 640, 480)
     cv2.createTrackbar('HUE Min', 'HSV', 0, 179, empty)
     cv2.createTrackbar('SAT Min', 'HSV', 0, 255, empty)

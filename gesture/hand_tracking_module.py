@@ -14,29 +14,38 @@ class HandTracker:
         self.results = None
         self.landmarks = None
 
-    def track_hands(self, frame):
-        with self.mp_hands.Hands(
-                static_image_mode=False,
-                max_num_hands=2,
-                min_detection_confidence=0.5,
-                min_tracking_confidence=0.5) as hands:
+    def track_hands(self):
+        while True:
+            ret, frame = self.video.read()
+            if not ret:
+                print("Cannot receive frame (stream end?). Exiting...")
+                break
 
-            image_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-            self.results = hands.process(image_rgb)
+            with self.mp_hands.Hands(
+                    static_image_mode=False,
+                    max_num_hands=2,
+                    min_detection_confidence=0.5,
+                    min_tracking_confidence=0.5) as hands:
 
-            if self.results.multi_hand_landmarks:
-                for hland in self.results.multi_hand_landmarks:
-                    self.mp_drawing.draw_landmarks(
-                        frame, hland, self.mp_hands.HAND_CONNECTIONS, self.mp_drawing.DrawingSpec(
-                            color=(0, 0, 255), thickness=2, circle_radius=2),
-                        self.mp_drawing.DrawingSpec(color=(0, 255, 0), thickness=2, circle_radius=2))
+                image_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+                self.results = hands.process(image_rgb)
 
-            self.display_fps(frame)
-            self.get_landmarks(frame)
+                if self.results.multi_hand_landmarks:
+                    for hland in self.results.multi_hand_landmarks:
+                        self.mp_drawing.draw_landmarks(
+                            frame, hland, self.mp_hands.HAND_CONNECTIONS, self.mp_drawing.DrawingSpec(
+                                color=(0, 0, 255), thickness=2, circle_radius=2),
+                            self.mp_drawing.DrawingSpec(color=(0, 255, 0), thickness=2, circle_radius=2))
 
-            cv2.imshow('Hand Tracking', frame)
-            if cv2.waitKey(1) & 0xFF == ord('q'):
-                return
+                self.display_fps(frame)
+                self.get_landmarks(frame)
+
+                cv2.imshow('Hand Tracking', frame)
+                if cv2.waitKey(1) & 0xFF == ord('q'):
+                    break
+
+        self.video.release()
+        cv2.destroyAllWindows()
 
     def get_landmarks(self, frame, hand=0):
         self.landmarks = []
@@ -46,8 +55,6 @@ class HandTracker:
                 h, w, _ = frame.shape
                 cx, cy = int(l.x * w), int(l.y * h)
                 self.landmarks.append([i, cx, cy])
-                # if i == hand:
-                #     cv2.circle(frame, (cx, cy), 10, (255, 0, 255), cv2.FILLED)
 
     def display_fps(self, frame):
         cur_time = time.time()
