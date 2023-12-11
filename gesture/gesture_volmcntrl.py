@@ -14,6 +14,7 @@ volume = interface.QueryInterface(IAudioEndpointVolume)
 # ///////////////////////////////////////////////////////////
 
 video = cv2.VideoCapture(0, cv2.CAP_DSHOW)
+# video = cv2.VideoCapture(0)
 video.set(3, 640)
 video.set(4, 480)
 tracker = HandTracker()
