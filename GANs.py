@@ -78,3 +78,22 @@ for epoch in range(epochs):
         g_loss = gan.train_on_batch(noise, misleading_labels)
     print(f"Discriminator loss: {d_loss}")
     print(f"Generator loss: {g_loss}")
+
+
+# Function to generate images based on random noise
+def generate_images(generator_model, num_images=1):
+    noise = tf.random.normal(shape=(num_images, 100))
+    generated_images = generator_model.predict(noise)
+    return generated_images
+
+
+# number of images to generate
+num_of_img = 5
+generated_images = generate_images(generator, num_of_img)
+
+plt.figure(figsize=(15, 3))
+for i in range(num_of_img):
+    plt.subplot(1, num_of_img, i + 1)
+    plt.imshow(generated_images[i, :, :, 0], cmap='gray')
+    plt.axis('off')
+plt.show()
